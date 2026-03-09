@@ -1,4 +1,4 @@
-load("@aspect_rules_js//js:defs.bzl", "js_library")
+load("@aspect_rules_js//js:defs.bzl", "js_binary", "js_library")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -7,4 +7,12 @@ js_library(
     srcs = [
         "wtr.config.mjs",
     ],
+)
+
+# Workaround for https://github.com/aspect-build/rules_js/commit/49201d1a4d362a3bf745b257fbf8d1f032e198c7#diff-b39b101d15f6349ce1a186d027b55e14d7e68f36604acf434d4e3f125f2c5519R86-R87
+js_binary(
+    name = "wtr_bin",
+    data = [":node_modules/@web/test-runner"],
+    entry_point = ":node_modules/@web/test-runner/dist/bin.js",
+    copy_data_to_bin = False,
 )
