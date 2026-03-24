@@ -1,4 +1,4 @@
-load("@aspect_rules_js//js:defs.bzl", "js_test")
+load("@npm_rules_browsers//:@web/test-runner/package_json.bzl", wtr = "bin")
 
 def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
     is_firefox = mode == "firefox"
@@ -31,10 +31,8 @@ def _base_wtr_test(name, mode, deps, tags = [], **kwargs):
         env = {"MANUAL_MODE": "1"}
         extra_tags += ["requires-network", "manual"]
 
-    # TODO(alanagius): Switch to `load("@npm_rules_browsers//:@web/test-runner/package_json.bzl", wtr = "bin")` once https://github.com/aspect-build/rules_js/issues/1537 is fixed.
-    js_test(
+    wtr.wtr_test(
         name = name,
-        entry_point = "@rules_browsers//wtr:wtr_bin",
         data = browser_deps + deps + [
             Label("//:node_modules/@web/test-runner-core"),
             Label("//:node_modules/@web/test-runner-puppeteer"),
